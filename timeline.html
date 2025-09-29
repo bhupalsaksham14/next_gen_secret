@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Birthday time!!</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: linear-gradient(135deg, #ffb3d1, #ffc3d8, #ffd3e0, #ffe3e8);
+            font-family: 'Georgia', serif;
+            line-height: 1.6;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            padding: 40px 0;
+            margin-bottom: 40px;
+        }
+
+        .header h1 {
+            font-size: 3.5rem;
+            color: #d63384;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+            font-weight: 300;
+        }
+
+        .header .subtitle {
+            font-size: 1.3rem;
+            color: #6f42c1;
+            font-style: italic;
+            margin-bottom: 30px;
+        }
+
+        .birthday-message {
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 20px;
+            padding: 30px;
+            margin: 40px 0;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.3);
+        }
+
+        .birthday-message h2 {
+            color: #d63384;
+            font-size: 2rem;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .birthday-message p {
+            color: #495057;
+            font-size: 1.1rem;
+            line-height: 1.8;
+            text-align: center;
+            margin-bottom: 15px;
+        }
+
+        .timeline {
+            position: relative;
+            margin: 60px 0;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 4px;
+            height: 100%;
+            background: linear-gradient(to bottom, #ff6b9d, #c44569, #f8b500);
+            border-radius: 2px;
+            box-shadow: 0 0 10px rgba(255, 107, 157, 0.3);
+        }
+
+        .timeline-item {
+            position: relative;
+            margin: 80px 0;
+            opacity: 0;
+            transform: translateY(50px);
+            transition: all 0.6s ease;
+        }
+
+        .timeline-item.animate {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .timeline-item:nth-child(odd) {
+            padding-right: 60%;
+        }
+
+        .timeline-item:nth-child(even) {
+            padding-left: 60%;
+        }
+
+        .timeline-content {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.3);
+            position: relative;
+        }
+
+        .timeline-item:nth-child(odd) .timeline-content::after {
+            content: '';
+            position: absolute;
+            right: -15px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 0;
+            height: 0;
+            border-left: 15px solid rgba(255, 255, 255, 0.95);
+            border-top: 15px solid transparent;
+            border-bottom: 15px solid transparent;
+        }
+
+        .timeline-item:nth-child(even) .timeline-content::after {
+            content: '';
+            position: absolute;
+            left: -15px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 0;
+            height: 0;
+            border-right: 15px solid rgba(255, 255, 255, 0.95);
+            border-top: 15px solid transparent;
+            border-bottom: 15px solid transparent;
+        }
+
+        .timeline-photo {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .timeline-photo:hover {
+            transform: scale(1.02);
+            box-shadow: 0 12px 35px rgba(0,0,0,0.2);
+        }
+
+        .timeline-date {
+            display: inline-block;
+            background: linear-gradient(45deg, #ff6b9d, #c44569);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: bold;
+            margin-bottom: 15px;
+            box-shadow: 0 4px 15px rgba(255, 107, 157, 0.3);
+        }
+
+        .timeline-title {
+            color: #d63384;
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+
+        .timeline-description {
+            color: #6c757d;
+            font-size: 1rem;
+            line-height: 1.7;
+        }
+
+        .timeline-marker {
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 20px;
+            height: 20px;
+            background: linear-gradient(45deg, #ff6b9d, #c44569);
+            border-radius: 50%;
+            top: 50%;
+            border: 4px solid white;
+            box-shadow: 0 0 15px rgba(255, 107, 157, 0.5);
+            z-index: 10;
+        }
+
+        .heart-decoration {
+            position: fixed;
+            color: #ff6b9d;
+            font-size: 20px;
+            pointer-events: none;
+            z-index: 1;
+            opacity: 0.3;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0px) rotate(0deg);
+            }
+            50% {
+                transform: translateY(-20px) rotate(180deg);
+            }
+        }
+
+        .back-button {
+            position: fixed;
+            top: 30px;
+            left: 30px;
+            background: linear-gradient(45deg, #ff6b9d, #c44569);
+            color: white;
+            border: none;
+            border-radius: 25px;
+            padding: 12px 20px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(255, 107, 157, 0.3);
+            z-index: 100;
+        }
+
+        .back-button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 25px rgba(255, 107, 157, 0.5);
+        }
+
+        @media (max-width: 768px) {
+            .timeline::before {
+                left: 30px;
+            }
+
+            .timeline-item:nth-child(odd),
+            .timeline-item:nth-child(even) {
+                padding-left: 70px;
+                padding-right: 20px;
+            }
+
+            .timeline-marker {
+                left: 30px;
+            }
+
+            .timeline-item:nth-child(odd) .timeline-content::after,
+            .timeline-item:nth-child(even) .timeline-content::after {
+                left: -15px;
+                right: auto;
+                border-right: 15px solid rgba(255, 255, 255, 0.95);
+                border-left: none;
+            }
+
+            .header h1 {
+                font-size: 2.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <button class="back-button" onclick="goBack()">← Back to Home</button>
+
+    <div class="container">
+        <div class="header">
+            <h1>💖 Our Beautiful Journey 💖</h1>
+            <p class="subtitle">Every moment with you is a treasure</p>
+        </div>
+
+        <div class="birthday-message">
+            <h2>🎂 Happy Birthday, Surbhi 🎂</h2>
+            <p>It's Hard to express in words how much you mean to me. अगर मैं शायर होता तो तुम पर कविताएँ लिखता।अफ़सोस,ये वेबसाइट ही बना सका।</p>
+            <p>Ever since I have met you, my life has become brighter than it has ever been. The care, kindness and love that you have shown me is something that I have never experienced from anyone in my life before. There have been so many moments of the 1 year of knowing you where I have been brought to tears just because of the overwhelming love the you have showered me with. I so in awe of you and honestly can't believe that I have you in my life. I want to bring you all the happiness in the world. I want to give you all the love I can muster up. You are in my every waking thought. I will be there for you for life.</p>
+            <p><strong>I remember you told me that you don't like your birthday, that you feel bad on your birthday. Well, from now on, it's my Job to make your birthday the most memorable day of the year. I promise you'll never forget any of your birthday's from now on (And I am counting the last one)</strong></p>
+        </div>
+
+        <div class="timeline">
+            <div class="timeline-item">
+                <div class="timeline-marker"></div>
+                <div class="timeline-content">
+                    <img class="timeline-photo" src="Timeline1.jpg" alt="Our First Meeting">
+                    <div class="timeline-date">The Beginning</div>
+                    <h3 class="timeline-title">Back in gurgaon</h3>
+                    <p class="timeline-description">Remember holding hands in japanese class?</p>
+                </div>
+            </div>
+
+            <div class="timeline-item">
+                <div class="timeline-marker"></div>
+                <div class="timeline-content">
+                    <img class="timeline-photo" src="Timeline2.jpg" alt="Our First Date">
+                    <div class="timeline-date">A Special Evening</div>
+                    <h3 class="timeline-title">Family day</h3>
+                    <p class="timeline-description">This night was so cinematic. We did't even take 1 picture together.</p>
+                </div>
+            </div>
+
+            <div class="timeline-item">
+                <div class="timeline-marker"></div>
+                <div class="timeline-content">
+                    <img class="timeline-photo" src="Timeline3.jpg" alt="Our Adventures">
+                    <div class="timeline-date">First day in Japan</div>
+                    <h3 class="timeline-title">Rexceed days</h3>
+                    <p class="timeline-description">This is where we took the best (and the stupidest) decision of our lives</p>
+                </div>
+            </div>
+
+            <div class="timeline-item">
+                <div class="timeline-marker"></div>
+                <div class="timeline-content">
+                    <img class="timeline-photo" src="Timeline4.JPG" alt="Special Moments">
+                    <div class="timeline-date">Moving in</div>
+                    <h3 class="timeline-title">Kawasaki Tekunopia</h3>
+                    <p class="timeline-description">1 year and 3 days ago</p>
+                </div>
+            </div>
+
+            <div class="timeline-item">
+                <div class="timeline-marker"></div>
+                <div class="timeline-content">
+                    <img class="timeline-photo" src="Timeline5.JPG" alt="Recent Memories">
+                    <div class="timeline-date">30th september 2024</div>
+                    <h3 class="timeline-title">Your last birthday</h3>
+                    <p class="timeline-description">When you owned Tokyo's most expensive shopping district in a saree</p>
+                </div>
+            </div>
+
+            <div class="timeline-item">
+                <div class="timeline-marker"></div>
+                <div class="timeline-content">
+                    <img class="timeline-photo" src="Timeline6.JPG" alt="Our Future">
+                    <div class="timeline-date">2025</div>
+                    <h3 class="timeline-title">And more..</h3>
+                    <p class="timeline-description">There is so much more to come </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Create floating heart decorations
+        function createHeartDecorations() {
+            const hearts = ['🌻', '🌷', '🪻', '🌺'];
+            
+            for (let i = 0; i < 15; i++) {
+                const heart = document.createElement('div');
+                heart.className = 'heart-decoration';
+                heart.innerHTML = hearts[Math.floor(Math.random() * hearts.length)];
+                heart.style.left = Math.random() * 100 + 'vw';
+                heart.style.top = Math.random() * 100 + 'vh';
+                heart.style.animationDelay = Math.random() * 6 + 's';
+                heart.style.fontSize = (15 + Math.random() * 10) + 'px';
+                document.body.appendChild(heart);
+            }
+        }
+
+        // Animate timeline items on scroll
+        function animateTimelineItems() {
+            const timelineItems = document.querySelectorAll('.timeline-item');
+            
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('animate');
+                    }
+                });
+            }, {
+                threshold: 0.1,
+                rootMargin: '0px 0px -100px 0px'
+            });
+
+            timelineItems.forEach(item => {
+                observer.observe(item);
+            });
+        }
+
+        // Navigation function
+        function goBack() {
+            window.location.href = 'index.html';
+        }
+
+        // Initialize everything when page loads
+        window.addEventListener('load', function() {
+            createHeartDecorations();
+            animateTimelineItems();
+            
+            // Add some sparkle effect on scroll
+            let sparkleTimeout;
+            window.addEventListener('scroll', () => {
+                clearTimeout(sparkleTimeout);
+                sparkleTimeout = setTimeout(() => {
+                    // Add a subtle sparkle effect
+                }, 100);
+            });
+        });
+
+        // Add some interactive elements
+        document.addEventListener('click', function(e) {
+            // Create a small heart animation at click position
+            if (e.target.tagName !== 'BUTTON' && e.target.tagName !== 'A') {
+                const heart = document.createElement('div');
+                heart.innerHTML = '💐';
+                heart.style.position = 'absolute';
+                heart.style.left = e.pageX + 'px';
+                heart.style.top = e.pageY + 'px';
+                heart.style.color = '#ff6b9d';
+                heart.style.fontSize = '20px';
+                heart.style.pointerEvents = 'none';
+                heart.style.zIndex = '1000';
+                heart.style.animation = 'float 2s ease-out forwards';
+                document.body.appendChild(heart);
+                
+                setTimeout(() => {
+                    heart.remove();
+                }, 2000);
+            }
+        });
+    </script>
+</body>
+</html>
